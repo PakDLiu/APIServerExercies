@@ -7,6 +7,7 @@ import (
 	"flag"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 )
 
@@ -63,5 +64,5 @@ func main() {
 	r.HandleFunc("/metadata/{id}", handleMetadataWithId)
 	http.Handle("/", r)
 
-	http.ListenAndServe(":8080", nil)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

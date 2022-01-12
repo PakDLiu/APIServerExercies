@@ -91,3 +91,232 @@ description: |
  ### Why app 2 is the best
  Because it simply is...
 ```
+
+## Usage
+
+This section explains how to invoke the APIs.
+
+### GET /metadata
+
+Returns a list of all metadata currently saved in the server in YAML format.
+
+Sample request:
+```
+GET localhost:8080/metadata
+```
+Sample output:
+```yaml
+- id: e0e14f72-594d-465c-83fa-7636cf7b43b5
+  title: Valid App 3
+  version: 0.0.1
+  maintainers:
+    - name: firstmaintainer app5
+      email: firstmaintainer@hotmail.com
+    - name: secondmaintainer app1
+      email: secondmaintainer@gmail.com
+  company: Random Inc.
+  website: https://website.com
+  source: https://github.com/random/repo
+  license: Apache-5.0
+  description: |-
+    ### Interesting Title
+    Some application content, and description
+- id: a917b089-6e0a-4cd3-b7d9-8f70722f1df4
+  title: Valid App 3
+  version: 0.0.1
+  maintainers:
+    - name: firstmaintainer app5
+      email: firstmaintainer@hotmail.com
+    - name: secondmaintainer app1
+      email: secondmaintainer@gmail.com
+  company: Random Inc.
+  website: https://website.com
+  source: https://github.com/random/repo
+  license: Apache-5.0
+  description: |-
+    ### Very Interesting Title
+    Some application content, and description
+- id: 8cac3b1f-569f-4079-8612-cb74d6be7be0
+  title: Valid App 3
+  version: 0.0.1
+  maintainers:
+    - name: firstmaintainer app5
+      email: firstmaintainer@hotmail.com
+    - name: secondmaintainer app1
+      email: secondmaintainer@gmail.com
+  company: Random Inc.
+  website: https://website.com
+  source: https://github.com/random/repo
+  license: Apache-2.0
+  description: |-
+    ### Interesting Title
+    Some application content, and description
+```
+
+#### Filtering
+
+Query parameters can be added to filter results. Everything is case-sensitive.
+
+Sample request:
+```
+GET localhost:8080/metadata?license=Apache-5.0
+```
+Sample output:
+```yaml
+- id: e0e14f72-594d-465c-83fa-7636cf7b43b5
+  title: Valid App 3
+  version: 0.0.1
+  maintainers:
+    - name: firstmaintainer app5
+      email: firstmaintainer@hotmail.com
+    - name: secondmaintainer app1
+      email: secondmaintainer@gmail.com
+  company: Random Inc.
+  website: https://website.com
+  source: https://github.com/random/repo
+  license: Apache-5.0
+  description: |-
+    ### Interesting Title
+    Some application content, and description
+```
+
+Each value's word are index and searchable by default. Can disable this feature with `-disableIndexWords` during startup.
+
+Sample request:
+```
+GET localhost:8080/metadata?description=Very
+```
+Sample output:
+```yaml
+- id: a917b089-6e0a-4cd3-b7d9-8f70722f1df4
+  title: Valid App 3
+  version: 0.0.1
+  maintainers:
+    - name: firstmaintainer app5
+      email: firstmaintainer@hotmail.com
+    - name: secondmaintainer app1
+      email: secondmaintainer@gmail.com
+  company: Random Inc.
+  website: https://website.com
+  source: https://github.com/random/repo
+  license: Apache-5.0
+  description: |-
+    ### Very Interesting Title
+    Some application content, and description
+```
+
+### GET /metadata/{id}
+
+Returns the matadata with the specified id.
+
+Sample request:
+```
+GET localhost:8080/metadata/8cac3b1f-569f-4079-8612-cb74d6be7be0
+```
+Sample output:
+```yaml
+- id: 8cac3b1f-569f-4079-8612-cb74d6be7be0
+  title: Valid App 3
+  version: 0.0.1
+  maintainers:
+    - name: firstmaintainer app5
+      email: firstmaintainer@hotmail.com
+    - name: secondmaintainer app1
+      email: secondmaintainer@gmail.com
+  company: Random Inc.
+  website: https://website.com
+  source: https://github.com/random/repo
+  license: Apache-2.0
+  description: |-
+    ### Interesting Title
+    Some application content, and description
+```
+
+### PUT /metadata
+
+**NOTE:** This endpoint doesn't really follow the REST guidelines; it is here just for convenience.
+Creates a metadata entry. If `id` is not provided in the payload, a random one will be generated.
+
+Sample request:
+```
+PUT localhost:8080/metadata
+```
+Sample payload:
+```yaml
+title: Valid App 3
+version: 0.0.1
+maintainers:
+- name: firstmaintainer app5
+  email: firstmaintainer@hotmail.com
+- name: secondmaintainer app1
+  email: secondmaintainer@gmail.com
+company: Random Inc.
+website: https://website.com
+source: https://github.com/random/repo
+license: Apache-5.0
+description: |
+ ### Very Interesting Title
+ Some application content, and description
+```
+Sample output:
+```yaml
+id: 5a1e0ea5-ece7-458d-8e97-4513105c68de
+title: Valid App 3
+version: 0.0.1
+maintainers:
+    - name: firstmaintainer app5
+      email: firstmaintainer@hotmail.com
+    - name: secondmaintainer app1
+      email: secondmaintainer@gmail.com
+company: Random Inc.
+website: https://website.com
+source: https://github.com/random/repo
+license: Apache-5.0
+description: |-
+    ### Very Interesting Title
+    Some application content, and description
+```
+
+### PUT /metadata/{id}
+
+Creates a metadata entry. If the `id` in the path does not match with the `id` in the payload, the `id` in the path will be used.
+
+Sample request:
+```
+PUT localhost:8080/metadata/5a1e0ea5-ece7-458d-8e97-4513105c68d1
+```
+Sample payload:
+```yaml
+title: Valid App 5
+version: 0.0.1
+maintainers:
+- name: firstmaintainer app5
+  email: firstmaintainer@hotmail.com
+- name: secondmaintainer app1
+  email: secondmaintainer@gmail.com
+company: Random Inc.
+website: https://website.com
+source: https://github.com/random/repo
+license: Apache-5.0
+description: |
+ ### Very Interesting Title
+ Some application content, and description
+```
+Sample output:
+```yaml
+id: 5a1e0ea5-ece7-458d-8e97-4513105c68d1
+title: Valid App 5
+version: 0.0.1
+maintainers:
+    - name: firstmaintainer app5
+      email: firstmaintainer@hotmail.com
+    - name: secondmaintainer app1
+      email: secondmaintainer@gmail.com
+company: Random Inc.
+website: https://website.com
+source: https://github.com/random/repo
+license: Apache-5.0
+description: |-
+    ### Very Interesting Title
+    Some application content, and description
+```

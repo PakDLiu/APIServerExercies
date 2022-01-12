@@ -51,7 +51,7 @@ func (m *MetadataHandlerManager) handleMetadataPutInner(
 	}
 
 	if id.String() != (uuid.UUID{}).String() {
-		// Id was passed in from url, takes presentent
+		// Id was passed in from url, takes precedence
 		metadata.Id = id
 	} else if metadata.Id.String() == (uuid.UUID{}).String() {
 		// No id was passed in request body, generate new id
