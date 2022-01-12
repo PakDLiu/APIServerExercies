@@ -1,3 +1,3 @@
 FROM ubuntu
 
-ADD APIServerExercies /APIServerExercies
+ADD APIServerExercise /APIServerExercise

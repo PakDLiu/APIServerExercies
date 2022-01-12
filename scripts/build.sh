@@ -5,4 +5,4 @@ if [[ $(pwd) =~ .*"scripts".* ]]; then
 fi
 
 go build
-docker build -f docker/Dockerfile -t apiserverexercies.azurecr.io/server:latest .
+docker build -f docker/Dockerfile -t apiserverexercise.azurecr.io/server:latest .

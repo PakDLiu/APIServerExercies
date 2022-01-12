@@ -1,8 +1,8 @@
 package metadatahandlers
 
 import (
-	"APIServerExercies/core"
-	"APIServerExercies/search"
+	"APIServerExercise/core"
+	"APIServerExercise/search"
 )
 
 type MetadataHandlerManager struct {

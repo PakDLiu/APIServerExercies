@@ -1,7 +1,7 @@
 package metadatahandlers
 
 import (
-	"APIServerExercies/core"
+	"APIServerExercise/core"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"

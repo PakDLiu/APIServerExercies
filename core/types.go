@@ -1,7 +1,7 @@
 package core
 
 import (
-	"APIServerExercies/util"
+	"APIServerExercise/util"
 	"github.com/google/uuid"
 )
 

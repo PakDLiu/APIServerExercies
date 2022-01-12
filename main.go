@@ -1,9 +1,9 @@
 package main
 
 import (
-	"APIServerExercies/core"
-	"APIServerExercies/metadatahandlers"
-	"APIServerExercies/search"
+	"APIServerExercise/core"
+	"APIServerExercise/metadatahandlers"
+	"APIServerExercise/search"
 	"flag"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"

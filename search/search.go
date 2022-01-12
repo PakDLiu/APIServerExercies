@@ -1,7 +1,7 @@
 package search
 
 import (
-	"APIServerExercies/core"
+	"APIServerExercise/core"
 	"fmt"
 	"github.com/google/uuid"
 	"reflect"

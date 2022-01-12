@@ -1,7 +1,7 @@
 package search
 
 import (
-	"APIServerExercies/core"
+	"APIServerExercise/core"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"testing"
