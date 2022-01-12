@@ -235,6 +235,7 @@ Sample output:
 ### PUT /metadata
 
 **NOTE:** This endpoint doesn't really follow the REST guidelines; it is here just for convenience.
+
 Creates a metadata entry. If `id` is not provided in the payload, a random one will be generated.
 
 Sample request:
