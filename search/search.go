@@ -15,9 +15,13 @@ type Indexer interface {
 	RemoveFromIndex(id uuid.UUID)
 }
 
+var _ Indexer = &Searcher{}
+
 type Filterer interface {
 	FilterMetadata(query map[string][]string, database *core.Database) ([]core.Metadata, error)
 }
+
+var _ Filterer = &Searcher{}
 
 type Searcher struct {
 	// Map of field name -> Map of field value -> Set of metadata Ids
