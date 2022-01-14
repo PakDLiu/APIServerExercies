@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strings"
 	"testing"
 )
 
@@ -234,6 +235,25 @@ func TestMetadataHandlerManager_HandleMetadataPutWithId_InvalidPayload(t *testin
 	assert.Contains(t, responseRecorder.Body.String(), "Validation failed")
 }
 
+func TestMetadataHandlerManager_HandleMetadataPutWithId_MalformedYaml(t *testing.T) {
+	id := uuid.New()
+	r := strings.NewReader("not yaml")
+	request := httptest.NewRequest(
+		http.MethodPut,
+		fmt.Sprintf("/metadata/%s", id.String()),
+		r)
+	request = mux.SetURLVars(request, map[string]string{
+		"id": id.String(),
+	})
+	responseRecorder := httptest.NewRecorder()
+
+	manager := MetadataHandlerManager{}
+	manager.HandleMetadataPutWithId(responseRecorder, request)
+
+	assert.Equal(t, http.StatusBadRequest, responseRecorder.Code)
+	assert.Contains(t, responseRecorder.Body.String(), "Failed to decode body")
+}
+
 // endregion
 
 // region HandleMetadataPut
@@ -332,6 +352,18 @@ func TestMetadataHandlerManager_HandleMetadataPut_InvalidPayload(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, responseRecorder.Code)
 	assert.Contains(t, responseRecorder.Body.String(), "Validation failed")
+}
+
+func TestMetadataHandlerManager_HandleMetadata_MalformedYaml(t *testing.T) {
+	r := strings.NewReader("not yaml")
+	request := httptest.NewRequest(http.MethodPut, "/metadata", r)
+	responseRecorder := httptest.NewRecorder()
+
+	manager := MetadataHandlerManager{}
+	manager.HandleMetadataPut(responseRecorder, request)
+
+	assert.Equal(t, http.StatusBadRequest, responseRecorder.Code)
+	assert.Contains(t, responseRecorder.Body.String(), "Failed to decode body")
 }
 
 // endregion
