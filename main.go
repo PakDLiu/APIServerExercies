@@ -43,6 +43,8 @@ func handleMetadataWithId(w http.ResponseWriter, req *http.Request) {
 		manager.HandleMetadataGetWithId(w, req)
 	case http.MethodPut:
 		manager.HandleMetadataPutWithId(w, req)
+	case http.MethodDelete:
+		manager.HandleMetadataDeleteWithId(w, req)
 	default:
 		w.WriteHeader(http.StatusNotFound)
 	}

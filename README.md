@@ -281,6 +281,7 @@ description: |-
 ### PUT /metadata/{id}
 
 Creates a metadata entry. If the `id` in the path does not match with the `id` in the payload, the `id` in the path will be used.
+
 This can also be used to update matadata, using the same id, the metadata with that id will be overwritten
 
 Sample request:
@@ -321,4 +322,15 @@ license: Apache-5.0
 description: |-
     ### Very Interesting Title
     Some application content, and description
+```
+
+### DELETE /metadata/{id}
+
+Deletes a metadata entry.
+
+Will return status code 200 if successfully deleted, 404 if the id doesn't exist
+
+Sample request:
+```
+DELETE localhost:8080/metadata/5a1e0ea5-ece7-458d-8e97-4513105c68d1
 ```
