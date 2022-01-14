@@ -281,6 +281,7 @@ description: |-
 ### PUT /metadata/{id}
 
 Creates a metadata entry. If the `id` in the path does not match with the `id` in the payload, the `id` in the path will be used.
+This can also be used to update matadata, using the same id, the metadata with that id will be overwritten
 
 Sample request:
 ```

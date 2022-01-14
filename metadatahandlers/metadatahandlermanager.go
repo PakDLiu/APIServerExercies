@@ -7,5 +7,6 @@ import (
 
 type MetadataHandlerManager struct {
 	Database *core.Database
-	Searcher *search.Searcher
+	Indexer  search.Indexer
+	Filterer search.Filterer
 }

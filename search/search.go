@@ -8,6 +8,17 @@ import (
 	"strings"
 )
 
+//go:generate sh -c "test mocks/search/mock_search.go -nt $GOFILE && exit 0; mockgen -source=search.go -destination ../mock/search/mock_search.go"
+
+type Indexer interface {
+	AddToIndex(data interface{}, id uuid.UUID, prefix string)
+	RemoveFromIndex(id uuid.UUID)
+}
+
+type Filterer interface {
+	FilterMetadata(query map[string][]string, database *core.Database) ([]core.Metadata, error)
+}
+
 type Searcher struct {
 	// Map of field name -> Map of field value -> Set of metadata Ids
 	Index             map[string]map[string]map[uuid.UUID]bool

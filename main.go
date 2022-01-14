@@ -17,7 +17,8 @@ var searcher *search.Searcher
 func handleMetadata(w http.ResponseWriter, req *http.Request) {
 	manager := metadatahandlers.MetadataHandlerManager{
 		Database: database,
-		Searcher: searcher,
+		Indexer:  searcher,
+		Filterer: searcher,
 	}
 
 	switch req.Method {
@@ -33,7 +34,8 @@ func handleMetadata(w http.ResponseWriter, req *http.Request) {
 func handleMetadataWithId(w http.ResponseWriter, req *http.Request) {
 	manager := metadatahandlers.MetadataHandlerManager{
 		Database: database,
-		Searcher: searcher,
+		Indexer:  searcher,
+		Filterer: searcher,
 	}
 
 	switch req.Method {

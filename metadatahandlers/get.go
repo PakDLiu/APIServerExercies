@@ -26,7 +26,7 @@ func (m *MetadataHandlerManager) HandleMetadataGetWithId(
 			id.String(),
 		},
 	}
-	results, err := m.Searcher.FilterMetadata(query, m.Database)
+	results, err := m.Filterer.FilterMetadata(query, m.Database)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
@@ -39,7 +39,7 @@ func (m *MetadataHandlerManager) HandleMetadataGetWithId(
 func (m *MetadataHandlerManager) HandleMetadataGet(
 	w http.ResponseWriter,
 	req *http.Request) {
-	results, err := m.Searcher.FilterMetadata(req.URL.Query(), m.Database)
+	results, err := m.Filterer.FilterMetadata(req.URL.Query(), m.Database)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
@@ -52,7 +52,7 @@ func (m *MetadataHandlerManager) returnResults(w http.ResponseWriter, results []
 	r, err := yaml.Marshal(results)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(fmt.Sprintf("Error unmarshalling metadata: Error: %v", err.Error())))
+		w.Write([]byte(fmt.Sprintf("Error marshalling metadata: Error: %v", err.Error())))
 		return
 	}
 	w.Header().Set("Content-Type", "application/x-yaml")

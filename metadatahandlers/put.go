@@ -61,12 +61,12 @@ func (m *MetadataHandlerManager) handleMetadataPutInner(
 	// Check if there is an existing metadata with the same Id
 	// If so, remove old metadata Id from indexes
 	if _, ok := m.Database.Metadatas[metadata.Id]; ok {
-		m.Searcher.RemoveFromIndex(metadata.Id)
+		m.Indexer.RemoveFromIndex(metadata.Id)
 	}
 
 	// Save metadata in database and add to index
 	m.Database.Metadatas[metadata.Id] = metadata
-	m.Searcher.AddToIndex(&metadata, metadata.Id, "")
+	m.Indexer.AddToIndex(&metadata, metadata.Id, "")
 
 	responseByte, _ := yaml.Marshal(&metadata)
 	w.Header().Set("Content-Type", "application/x-yaml")
