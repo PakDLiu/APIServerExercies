@@ -101,9 +101,9 @@ func (s *Searcher) RemoveFromIndex(id uuid.UUID) {
 
 func (s *Searcher) FilterMetadata(query map[string][]string, database *core.Database) ([]*core.Metadata, error) {
 	// Copy all metadatas
-	results := map[uuid.UUID]*core.Metadata{}
-	for k, v := range database.Metadatas {
-		results[k] = v
+	results := make([]*core.Metadata, 0, len(database.Metadatas))
+	for _, id := range database.Ordering {
+		results = append(results, database.Metadatas[id])
 	}
 
 	// Filter by query parameters
@@ -121,12 +121,12 @@ func (s *Searcher) FilterMetadata(query map[string][]string, database *core.Data
 		// Get the list of matched ids for the query
 		// Only care about the first query value
 		matchedIds := fieldNameIndex[queryValues[0]]
-		newResult := map[uuid.UUID]*core.Metadata{}
+		newResult := make([]*core.Metadata, 0, len(matchedIds))
 
 		// Craft new result list based on matching ids from index
-		for id := range results {
-			if _, ok := matchedIds[id]; ok {
-				newResult[id] = results[id]
+		for index, metadata := range results {
+			if _, ok := matchedIds[metadata.Id]; ok {
+				newResult = append(newResult, results[index])
 			}
 		}
 		results = newResult

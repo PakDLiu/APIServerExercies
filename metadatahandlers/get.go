@@ -1,7 +1,6 @@
 package metadatahandlers
 
 import (
-	"APIServerExercise/core"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -21,18 +20,16 @@ func (m *MetadataHandlerManager) HandleMetadataGetWithId(
 		return
 	}
 
-	query := map[string][]string{
-		"id": {
-			id.String(),
-		},
-	}
-	results, err := m.Filterer.FilterMetadata(query, m.Database)
+	result := m.Database.Metadatas[id]
+	r, err := yaml.Marshal(result)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(fmt.Sprintf("Error marshalling metadata: Error: %v", err.Error())))
 		return
 	}
-	m.returnResults(w, results)
+	w.Header().Set("Content-Type", "application/x-yaml")
+	w.WriteHeader(http.StatusOK)
+	w.Write(r)
 }
 
 // GET /metadata
@@ -45,10 +42,7 @@ func (m *MetadataHandlerManager) HandleMetadataGet(
 		w.Write([]byte(err.Error()))
 		return
 	}
-	m.returnResults(w, results)
-}
 
-func (m *MetadataHandlerManager) returnResults(w http.ResponseWriter, results []*core.Metadata) {
 	r, err := yaml.Marshal(results)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

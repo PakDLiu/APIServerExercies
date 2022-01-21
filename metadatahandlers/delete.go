@@ -26,6 +26,13 @@ func (m *MetadataHandlerManager) HandleMetadataDeleteWithId(
 
 	m.Indexer.RemoveFromIndex(id)
 	delete(m.Database.Metadatas, id)
+	for index, existingId := range m.Database.Ordering {
+		if id == existingId {
+			// remove id from Ordering
+			m.Database.Ordering = append(m.Database.Ordering[:index], m.Database.Ordering[index+1:]...)
+			break
+		}
+	}
 
 	w.WriteHeader(http.StatusOK)
 }

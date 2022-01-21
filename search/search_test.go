@@ -194,11 +194,13 @@ func TestSearcher_RemoveFromIndex_RemoveValueIndex(t *testing.T) {
 func TestSearcher_FilterMetadata(t *testing.T) {
 	id1 := uuid.New()
 	id2 := uuid.New()
+	id3 := uuid.New()
+	id4 := uuid.New()
 
 	searcher := Searcher{
 		Index: map[string]map[string]map[uuid.UUID]bool{
 			"key": {
-				"value1": {id1: true},
+				"value1": {id1: true, id4: true, id3: true},
 				"value2": {id2: true},
 			},
 		},
@@ -208,6 +210,14 @@ func TestSearcher_FilterMetadata(t *testing.T) {
 		Metadatas: map[uuid.UUID]*core.Metadata{
 			id1: {Id: id1},
 			id2: {Id: id2},
+			id4: {Id: id4},
+			id3: {Id: id3},
+		},
+		Ordering: []uuid.UUID{
+			id1,
+			id2,
+			id3,
+			id4,
 		},
 	}
 
@@ -217,8 +227,10 @@ func TestSearcher_FilterMetadata(t *testing.T) {
 
 	results, err := searcher.FilterMetadata(query, database)
 	assert.Nil(t, err)
-	assert.Len(t, results, 1)
+	assert.Len(t, results, 3)
 	assert.Equal(t, id1, results[0].Id)
+	assert.Equal(t, id3, results[1].Id)
+	assert.Equal(t, id4, results[2].Id)
 }
 
 func TestSearcher_FilterMetadata_WithInvalidKey(t *testing.T) {
@@ -235,6 +247,9 @@ func TestSearcher_FilterMetadata_WithInvalidKey(t *testing.T) {
 	database := &core.Database{
 		Metadatas: map[uuid.UUID]*core.Metadata{
 			id1: {Id: id1},
+		},
+		Ordering: []uuid.UUID{
+			id1,
 		},
 	}
 

@@ -62,6 +62,9 @@ func (m *MetadataHandlerManager) handleMetadataPutInner(
 	// If so, remove old metadata Id from indexes
 	if _, ok := m.Database.Metadatas[metadata.Id]; ok {
 		m.Indexer.RemoveFromIndex(metadata.Id)
+	} else {
+		// this is a new metadata, add to ordering
+		m.Database.Ordering = append(m.Database.Ordering, metadata.Id)
 	}
 
 	// Save metadata in database and add to index

@@ -6,7 +6,8 @@ import (
 )
 
 type Database struct {
-	Metadatas map[uuid.UUID]*Metadata `yaml:"metadatas"`
+	Metadatas map[uuid.UUID]*Metadata
+	Ordering  []uuid.UUID // to keep default ordering
 }
 
 type Metadata struct {

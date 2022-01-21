@@ -87,6 +87,8 @@ func TestMetadataHandlerManager_HandleMetadataPutWithId(t *testing.T) {
 	assert.Equal(t, string(expectedBytes), responseRecorder.Body.String())
 	assert.Len(t, manager.Database.Metadatas, 1)
 	assert.Equal(t, manager.Database.Metadatas[testMetadata.Id], testMetadata)
+	assert.Len(t, manager.Database.Ordering, 1)
+	assert.Equal(t, manager.Database.Ordering[0], testMetadata.Id)
 }
 
 func TestMetadataHandlerManager_HandleMetadataPutWithId_DifferentIds(t *testing.T) {
@@ -132,6 +134,8 @@ func TestMetadataHandlerManager_HandleMetadataPutWithId_DifferentIds(t *testing.
 	assert.Equal(t, string(expectedBytes), responseRecorder.Body.String())
 	assert.Len(t, manager.Database.Metadatas, 1)
 	assert.Equal(t, manager.Database.Metadatas[pathId], testMetadata)
+	assert.Len(t, manager.Database.Ordering, 1)
+	assert.Equal(t, manager.Database.Ordering[0], testMetadata.Id)
 }
 
 func TestMetadataHandlerManager_HandleMetadataPutWithId_UpdateMetadata(t *testing.T) {
@@ -179,9 +183,14 @@ func TestMetadataHandlerManager_HandleMetadataPutWithId_UpdateMetadata(t *testin
 	mockIndexer.EXPECT().RemoveFromIndex(testMetadata.Id).Times(1)
 
 	manager := MetadataHandlerManager{
-		Database: &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{
-			testMetadata.Id: oldMetadata,
-		}},
+		Database: &core.Database{
+			Metadatas: map[uuid.UUID]*core.Metadata{
+				testMetadata.Id: oldMetadata,
+			},
+			Ordering: []uuid.UUID{
+				testMetadata.Id,
+			},
+		},
 		Indexer: mockIndexer,
 	}
 	manager.HandleMetadataPutWithId(responseRecorder, request)
@@ -190,6 +199,8 @@ func TestMetadataHandlerManager_HandleMetadataPutWithId_UpdateMetadata(t *testin
 	assert.Equal(t, string(expectedBytes), responseRecorder.Body.String())
 	assert.Len(t, manager.Database.Metadatas, 1)
 	assert.Equal(t, manager.Database.Metadatas[testMetadata.Id], testMetadata)
+	assert.Len(t, manager.Database.Ordering, 1)
+	assert.Equal(t, manager.Database.Ordering[0], testMetadata.Id)
 }
 
 func TestMetadataHandlerManager_HandleMetadataPutWithId_InvalidPathId(t *testing.T) {
@@ -292,6 +303,8 @@ func TestMetadataHandlerManager_HandleMetadataPut_WithIdInPayload(t *testing.T) 
 	assert.Equal(t, string(expectedBytes), responseRecorder.Body.String())
 	assert.Len(t, manager.Database.Metadatas, 1)
 	assert.Equal(t, manager.Database.Metadatas[testMetadata.Id], testMetadata)
+	assert.Len(t, manager.Database.Ordering, 1)
+	assert.Equal(t, manager.Database.Ordering[0], testMetadata.Id)
 }
 
 func TestMetadataHandlerManager_HandleMetadataPut_WithoutId(t *testing.T) {
@@ -334,6 +347,8 @@ func TestMetadataHandlerManager_HandleMetadataPut_WithoutId(t *testing.T) {
 	assert.Equal(t, string(expectedBytes), responseRecorder.Body.String())
 	assert.Len(t, manager.Database.Metadatas, 1)
 	assert.Equal(t, manager.Database.Metadatas[testMetadata.Id], testMetadata)
+	assert.Len(t, manager.Database.Ordering, 1)
+	assert.Equal(t, manager.Database.Ordering[0], testMetadata.Id)
 }
 
 func TestMetadataHandlerManager_HandleMetadataPut_InvalidPayload(t *testing.T) {
