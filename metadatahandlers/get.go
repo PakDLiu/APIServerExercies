@@ -48,7 +48,7 @@ func (m *MetadataHandlerManager) HandleMetadataGet(
 	m.returnResults(w, results)
 }
 
-func (m *MetadataHandlerManager) returnResults(w http.ResponseWriter, results []core.Metadata) {
+func (m *MetadataHandlerManager) returnResults(w http.ResponseWriter, results []*core.Metadata) {
 	r, err := yaml.Marshal(results)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

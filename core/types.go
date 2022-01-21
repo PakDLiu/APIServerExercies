@@ -6,7 +6,7 @@ import (
 )
 
 type Database struct {
-	Metadatas map[uuid.UUID]Metadata `yaml:"metadatas"`
+	Metadatas map[uuid.UUID]*Metadata `yaml:"metadatas"`
 }
 
 type Metadata struct {

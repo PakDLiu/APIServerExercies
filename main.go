@@ -57,7 +57,7 @@ func main() {
 		"Disable indexing part of values. IE: Do not index each word in description field")
 	flag.Parse()
 
-	database = &core.Database{Metadatas: map[uuid.UUID]core.Metadata{}}
+	database = &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{}}
 	searcher = &search.Searcher{
 		Index:             map[string]map[string]map[uuid.UUID]bool{},
 		DisableIndexWords: *disableIndexWordsFlag,

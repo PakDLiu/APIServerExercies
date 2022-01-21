@@ -18,7 +18,7 @@ type Indexer interface {
 var _ Indexer = &Searcher{}
 
 type Filterer interface {
-	FilterMetadata(query map[string][]string, database *core.Database) ([]core.Metadata, error)
+	FilterMetadata(query map[string][]string, database *core.Database) ([]*core.Metadata, error)
 }
 
 var _ Filterer = &Searcher{}
@@ -99,9 +99,9 @@ func (s *Searcher) RemoveFromIndex(id uuid.UUID) {
 	}
 }
 
-func (s *Searcher) FilterMetadata(query map[string][]string, database *core.Database) ([]core.Metadata, error) {
+func (s *Searcher) FilterMetadata(query map[string][]string, database *core.Database) ([]*core.Metadata, error) {
 	// Copy all metadatas
-	results := map[uuid.UUID]core.Metadata{}
+	results := map[uuid.UUID]*core.Metadata{}
 	for k, v := range database.Metadatas {
 		results[k] = v
 	}
@@ -121,7 +121,7 @@ func (s *Searcher) FilterMetadata(query map[string][]string, database *core.Data
 		// Get the list of matched ids for the query
 		// Only care about the first query value
 		matchedIds := fieldNameIndex[queryValues[0]]
-		newResult := map[uuid.UUID]core.Metadata{}
+		newResult := map[uuid.UUID]*core.Metadata{}
 
 		// Craft new result list based on matching ids from index
 		for id := range results {
@@ -133,7 +133,7 @@ func (s *Searcher) FilterMetadata(query map[string][]string, database *core.Data
 	}
 
 	// Extract all metadatas from map to slice
-	values := make([]core.Metadata, 0, len(results))
+	values := make([]*core.Metadata, 0, len(results))
 	for _, value := range results {
 		values = append(values, value)
 	}

@@ -21,7 +21,7 @@ func TestMetadataHandlerManager_HandleMetadataGetWithId(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	database := &core.Database{Metadatas: map[uuid.UUID]core.Metadata{
+	database := &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{
 		testMetadata.Id: testMetadata,
 	}}
 
@@ -38,10 +38,10 @@ func TestMetadataHandlerManager_HandleMetadataGetWithId(t *testing.T) {
 	mockFilterer.
 		EXPECT().
 		FilterMetadata(gomock.Any(), database).
-		DoAndReturn(func(query map[string][]string, database *core.Database) ([]core.Metadata, error) {
+		DoAndReturn(func(query map[string][]string, database *core.Database) ([]*core.Metadata, error) {
 			assert.Len(t, query["id"], 1)
 			assert.Equal(t, testMetadata.Id.String(), query["id"][0])
-			return []core.Metadata{testMetadata}, nil
+			return []*core.Metadata{testMetadata}, nil
 		}).
 		Times(1)
 
@@ -57,7 +57,7 @@ func TestMetadataHandlerManager_HandleMetadataGetWithId(t *testing.T) {
 	err := yaml.Unmarshal(responseRecorder.Body.Bytes(), &actual)
 	assert.Nil(t, err)
 	assert.Len(t, actual, 1)
-	assert.Equal(t, actual[0], testMetadata)
+	assert.Equal(t, &actual[0], testMetadata)
 }
 
 func TestMetadataHandlerManager_HandleMetadataGetWithId_WithInvalidId(t *testing.T) {
@@ -86,7 +86,7 @@ func TestMetadataHandlerManager_HandleMetadataGetWithId_WithFilterError(t *testi
 
 	testError := fmt.Errorf("test error")
 
-	database := &core.Database{Metadatas: map[uuid.UUID]core.Metadata{
+	database := &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{
 		testMetadata.Id: testMetadata,
 	}}
 
@@ -129,7 +129,7 @@ func TestMetadataHandlerManager_HandleMetadataGet(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	database := &core.Database{Metadatas: map[uuid.UUID]core.Metadata{
+	database := &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{
 		testMetadata.Id: testMetadata,
 	}}
 
@@ -140,9 +140,9 @@ func TestMetadataHandlerManager_HandleMetadataGet(t *testing.T) {
 	mockFilterer.
 		EXPECT().
 		FilterMetadata(gomock.Any(), database).
-		DoAndReturn(func(query map[string][]string, database *core.Database) ([]core.Metadata, error) {
+		DoAndReturn(func(query map[string][]string, database *core.Database) ([]*core.Metadata, error) {
 			assert.Empty(t, query)
-			return []core.Metadata{testMetadata}, nil
+			return []*core.Metadata{testMetadata}, nil
 		}).
 		Times(1)
 
@@ -158,7 +158,7 @@ func TestMetadataHandlerManager_HandleMetadataGet(t *testing.T) {
 	err := yaml.Unmarshal(responseRecorder.Body.Bytes(), &actual)
 	assert.Nil(t, err)
 	assert.Len(t, actual, 1)
-	assert.Equal(t, actual[0], testMetadata)
+	assert.Equal(t, &actual[0], testMetadata)
 }
 
 func TestMetadataHandlerManager_HandleMetadataGet_WithFilterError(t *testing.T) {
@@ -168,7 +168,7 @@ func TestMetadataHandlerManager_HandleMetadataGet_WithFilterError(t *testing.T) 
 
 	testError := fmt.Errorf("test error")
 
-	database := &core.Database{Metadatas: map[uuid.UUID]core.Metadata{
+	database := &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{
 		testMetadata.Id: testMetadata,
 	}}
 

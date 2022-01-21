@@ -18,12 +18,12 @@ import (
 	"testing"
 )
 
-var testMetadata core.Metadata
+var testMetadata *core.Metadata
 
 func setupTest() {
 	website, _ := url.Parse("https://website.com")
 	source, _ := url.Parse("https://github.com/random/repo")
-	testMetadata = core.Metadata{
+	testMetadata = &core.Metadata{
 		Id:      uuid.New(),
 		Title:   "Valid App 1",
 		Version: "0.0.1",
@@ -72,13 +72,13 @@ func TestMetadataHandlerManager_HandleMetadataPutWithId(t *testing.T) {
 	mockIndexer.
 		EXPECT().
 		AddToIndex(
-			gomock.Eq(&testMetadata),
+			gomock.Eq(testMetadata),
 			testMetadata.Id,
 			"").
 		Times(1)
 
 	manager := MetadataHandlerManager{
-		Database: &core.Database{Metadatas: map[uuid.UUID]core.Metadata{}},
+		Database: &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{}},
 		Indexer:  mockIndexer,
 	}
 	manager.HandleMetadataPutWithId(responseRecorder, request)
@@ -117,13 +117,13 @@ func TestMetadataHandlerManager_HandleMetadataPutWithId_DifferentIds(t *testing.
 	mockIndexer.
 		EXPECT().
 		AddToIndex(
-			gomock.Eq(&testMetadata),
+			gomock.Eq(testMetadata),
 			pathId,
 			"").
 		Times(1)
 
 	manager := MetadataHandlerManager{
-		Database: &core.Database{Metadatas: map[uuid.UUID]core.Metadata{}},
+		Database: &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{}},
 		Indexer:  mockIndexer,
 	}
 	manager.HandleMetadataPutWithId(responseRecorder, request)
@@ -140,7 +140,7 @@ func TestMetadataHandlerManager_HandleMetadataPutWithId_UpdateMetadata(t *testin
 	defer ctrl.Finish()
 
 	oldWebsite, _ := url.Parse("https://www.microsoft.com")
-	oldMetadata := core.Metadata{
+	oldMetadata := &core.Metadata{
 		Id:          testMetadata.Id,
 		Title:       "old title",
 		Version:     "0.0.0",
@@ -172,14 +172,14 @@ func TestMetadataHandlerManager_HandleMetadataPutWithId_UpdateMetadata(t *testin
 	mockIndexer.
 		EXPECT().
 		AddToIndex(
-			gomock.Eq(&testMetadata),
+			gomock.Eq(testMetadata),
 			testMetadata.Id,
 			"").
 		Times(1)
 	mockIndexer.EXPECT().RemoveFromIndex(testMetadata.Id).Times(1)
 
 	manager := MetadataHandlerManager{
-		Database: &core.Database{Metadatas: map[uuid.UUID]core.Metadata{
+		Database: &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{
 			testMetadata.Id: oldMetadata,
 		}},
 		Indexer: mockIndexer,
@@ -277,13 +277,13 @@ func TestMetadataHandlerManager_HandleMetadataPut_WithIdInPayload(t *testing.T) 
 	mockIndexer.
 		EXPECT().
 		AddToIndex(
-			gomock.Eq(&testMetadata),
+			gomock.Eq(testMetadata),
 			testMetadata.Id,
 			"").
 		Times(1)
 
 	manager := MetadataHandlerManager{
-		Database: &core.Database{Metadatas: map[uuid.UUID]core.Metadata{}},
+		Database: &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{}},
 		Indexer:  mockIndexer,
 	}
 	manager.HandleMetadataPut(responseRecorder, request)
@@ -317,12 +317,12 @@ func TestMetadataHandlerManager_HandleMetadataPut_WithoutId(t *testing.T) {
 			"").
 		Do(func(actual *core.Metadata, id uuid.UUID, prefix string) {
 			testMetadata.Id = id
-			assert.Equal(t, &testMetadata, actual)
+			assert.Equal(t, testMetadata, actual)
 		}).
 		Times(1)
 
 	manager := MetadataHandlerManager{
-		Database: &core.Database{Metadatas: map[uuid.UUID]core.Metadata{}},
+		Database: &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{}},
 		Indexer:  mockIndexer,
 	}
 	manager.HandleMetadataPut(responseRecorder, request)

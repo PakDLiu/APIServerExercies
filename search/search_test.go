@@ -205,7 +205,7 @@ func TestSearcher_FilterMetadata(t *testing.T) {
 	}
 
 	database := &core.Database{
-		Metadatas: map[uuid.UUID]core.Metadata{
+		Metadatas: map[uuid.UUID]*core.Metadata{
 			id1: {Id: id1},
 			id2: {Id: id2},
 		},
@@ -233,7 +233,7 @@ func TestSearcher_FilterMetadata_WithInvalidKey(t *testing.T) {
 	}
 
 	database := &core.Database{
-		Metadatas: map[uuid.UUID]core.Metadata{
+		Metadatas: map[uuid.UUID]*core.Metadata{
 			id1: {Id: id1},
 		},
 	}

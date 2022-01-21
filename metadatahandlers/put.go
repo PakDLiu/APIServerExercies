@@ -44,7 +44,7 @@ func (m *MetadataHandlerManager) handleMetadataPutInner(
 	}
 
 	// Validate request metadata
-	if err := core.ValidateStruct(&metadata); err != nil {
+	if err := core.ValidateStruct(metadata); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(fmt.Sprintf("Validation failed: %v\n", err.Error())))
 		return
@@ -65,7 +65,7 @@ func (m *MetadataHandlerManager) handleMetadataPutInner(
 	}
 
 	// Save metadata in database and add to index
-	m.Database.Metadatas[metadata.Id] = metadata
+	m.Database.Metadatas[metadata.Id] = &metadata
 	m.Indexer.AddToIndex(&metadata, metadata.Id, "")
 
 	responseByte, _ := yaml.Marshal(&metadata)

@@ -32,7 +32,7 @@ func TestMetadataHandlerManager_HandleMetadataDeleteWithId(t *testing.T) {
 	mockIndexer.EXPECT().RemoveFromIndex(id).Times(1)
 
 	manager := MetadataHandlerManager{
-		Database: &core.Database{Metadatas: map[uuid.UUID]core.Metadata{
+		Database: &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{
 			id: {},
 		}},
 		Indexer: mockIndexer,
@@ -81,7 +81,7 @@ func TestMetadataHandlerManager_HandleMetadataDeleteWithId_WithNonExistentId(t *
 	responseRecorder := httptest.NewRecorder()
 
 	manager := MetadataHandlerManager{
-		Database: &core.Database{Metadatas: map[uuid.UUID]core.Metadata{
+		Database: &core.Database{Metadatas: map[uuid.UUID]*core.Metadata{
 			uuid.New(): {},
 		}},
 	}
