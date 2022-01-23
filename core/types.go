@@ -26,3 +26,8 @@ type Maintainer struct {
 	Name  string `yaml:"name" validate:"required"`
 	Email string `yaml:"email" validate:"required,email"`
 }
+
+type ResultPage struct {
+	Resources []*Metadata `yaml:"resources"`
+	NextLink  string      `yaml:"nextLink"`
+}
