@@ -106,78 +106,165 @@ GET localhost:8080/metadata
 ```
 Sample output:
 ```yaml
-- id: e0e14f72-594d-465c-83fa-7636cf7b43b5
-  title: Valid App 3
-  version: 0.0.1
-  maintainers:
-    - name: firstmaintainer app5
-      email: firstmaintainer@hotmail.com
-    - name: secondmaintainer app1
-      email: secondmaintainer@gmail.com
-  company: Random Inc.
-  website: https://website.com
-  source: https://github.com/random/repo
-  license: Apache-5.0
-  description: |-
-    ### Interesting Title
-    Some application content, and description
-- id: a917b089-6e0a-4cd3-b7d9-8f70722f1df4
-  title: Valid App 3
-  version: 0.0.1
-  maintainers:
-    - name: firstmaintainer app5
-      email: firstmaintainer@hotmail.com
-    - name: secondmaintainer app1
-      email: secondmaintainer@gmail.com
-  company: Random Inc.
-  website: https://website.com
-  source: https://github.com/random/repo
-  license: Apache-5.0
-  description: |-
-    ### Very Interesting Title
-    Some application content, and description
-- id: 8cac3b1f-569f-4079-8612-cb74d6be7be0
-  title: Valid App 3
-  version: 0.0.1
-  maintainers:
-    - name: firstmaintainer app5
-      email: firstmaintainer@hotmail.com
-    - name: secondmaintainer app1
-      email: secondmaintainer@gmail.com
-  company: Random Inc.
-  website: https://website.com
-  source: https://github.com/random/repo
-  license: Apache-2.0
-  description: |-
-    ### Interesting Title
-    Some application content, and description
+resources:
+    - id: e9861b9b-9155-4857-a9e9-c651ad7abba9
+      title: Valid App 1
+      version: 0.0.1
+      maintainers:
+        - name: firstmaintainer app5
+          email: firstmaintainer@hotmail.com
+        - name: secondmaintainer app1
+          email: secondmaintainer@gmail.com
+      company: Random Inc.
+      website: https://website.com
+      source: https://github.com/random/repo
+      license: Apache-5.0
+      description: |-
+        ### Interesting Title
+        Some application content, and description
+    - id: 8530ed02-d42d-4e09-aac6-8f65be04462d
+      title: Valid App 2
+      version: 0.0.1
+      maintainers:
+        - name: firstmaintainer app5
+          email: firstmaintainer@hotmail.com
+        - name: secondmaintainer app1
+          email: secondmaintainer@gmail.com
+      company: Random Inc.
+      website: https://website.com
+      source: https://github.com/random/repo
+      license: Apache-5.0
+      description: |-
+        ### Interesting Title
+        Some application content, and description
+    - id: 620385c2-1361-4bdd-a09d-266e0286f98b
+      title: Valid App 3
+      version: 0.0.1
+      maintainers:
+        - name: firstmaintainer app5
+          email: firstmaintainer@hotmail.com
+        - name: secondmaintainer app1
+          email: secondmaintainer@gmail.com
+      company: Random Inc.
+      website: https://website.com
+      source: https://github.com/random/repo
+      license: Apache-5.0
+      description: |-
+        ### Interesting Title
+        Some application content, and description
+    - id: 05b9a9d7-917c-42ca-9872-ebd8f4a8b68f
+      title: Valid App 4
+      version: 0.0.1
+      maintainers:
+        - name: firstmaintainer app5
+          email: firstmaintainer@hotmail.com
+        - name: secondmaintainer app1
+          email: secondmaintainer@gmail.com
+      company: Random Inc.
+      website: https://website.com
+      source: https://github.com/random/repo
+      license: Apache-5.0
+      description: |-
+        ### Interesting Title
+        Some application content, and description
+nextLink: ""
+```
+
+#### Paging
+
+Paging parameters can be added to change the paging behavior. Everything is case-sensitive.
+
+| Parameter | Description | Validation |
+| --- | --- | --- |
+| offset | The position from where the page should start | >= 0 |
+| pageSize | The size of the page | > 0 |
+
+If there is a next page, the `nextLink` property will be populated. It will contain the link to the next page.
+
+Sample request:
+```
+GET localhost:8080/metadata?pageSize=2&offset=1
+```
+Sample output:
+```yaml
+resources:
+    - id: 8530ed02-d42d-4e09-aac6-8f65be04462d
+      title: Valid App 2
+      version: 0.0.1
+      maintainers:
+        - name: firstmaintainer app5
+          email: firstmaintainer@hotmail.com
+        - name: secondmaintainer app1
+          email: secondmaintainer@gmail.com
+      company: Random Inc.
+      website: https://website.com
+      source: https://github.com/random/repo
+      license: Apache-5.0
+      description: |-
+        ### Interesting Title
+        Some application content, and description
+    - id: 620385c2-1361-4bdd-a09d-266e0286f98b
+      title: Valid App 3
+      version: 0.0.1
+      maintainers:
+        - name: firstmaintainer app5
+          email: firstmaintainer@hotmail.com
+        - name: secondmaintainer app1
+          email: secondmaintainer@gmail.com
+      company: Random Inc.
+      website: https://website.com
+      source: https://github.com/random/repo
+      license: Apache-5.0
+      description: |-
+        ### Interesting Title
+        Some application content, and description
+nextLink: http://localhost:8080/metadata?offset=3&pageSize=2
 ```
 
 #### Filtering
 
-Query parameters can be added to filter results. Everything is case-sensitive.
+Query parameters can be added to filter results.
+
+Paging parameters will be excluded in the filtering
 
 Sample request:
 ```
-GET localhost:8080/metadata?license=Apache-5.0
+GET localhost:8080/metadata?license=Apache-6.0
 ```
 Sample output:
 ```yaml
-- id: e0e14f72-594d-465c-83fa-7636cf7b43b5
-  title: Valid App 3
-  version: 0.0.1
-  maintainers:
-    - name: firstmaintainer app5
-      email: firstmaintainer@hotmail.com
-    - name: secondmaintainer app1
-      email: secondmaintainer@gmail.com
-  company: Random Inc.
-  website: https://website.com
-  source: https://github.com/random/repo
-  license: Apache-5.0
-  description: |-
-    ### Interesting Title
-    Some application content, and description
+resources:
+    - id: 36ca2d06-5106-40c0-8e1e-33d5c2e3eb26
+      title: Valid App 5
+      version: 0.0.1
+      maintainers:
+        - name: firstmaintainer app5
+          email: firstmaintainer@hotmail.com
+        - name: secondmaintainer app1
+          email: secondmaintainer@gmail.com
+      company: Random Inc.
+      website: https://website.com
+      source: https://github.com/random/repo
+      license: Apache-6.0
+      description: |-
+        ### Interesting Title
+        Some application content, and description
+    - id: e2bdb456-704c-47e6-a0c7-934b26cd5ccf
+      title: Valid App 6
+      version: 0.0.1
+      maintainers:
+        - name: firstmaintainer app5
+          email: firstmaintainer@hotmail.com
+        - name: secondmaintainer app1
+          email: secondmaintainer@gmail.com
+      company: Random Inc.
+      website: https://website.com
+      source: https://github.com/random/repo
+      license: Apache-6.0
+      description: |-
+        ### Very Interesting Title
+        Some application content, and description
+nextLink: ""
 ```
 
 Each value's word are index and searchable by default. Can disable this feature with `-disableIndexWords` during startup.
@@ -188,21 +275,23 @@ GET localhost:8080/metadata?description=Very
 ```
 Sample output:
 ```yaml
-- id: a917b089-6e0a-4cd3-b7d9-8f70722f1df4
-  title: Valid App 3
-  version: 0.0.1
-  maintainers:
-    - name: firstmaintainer app5
-      email: firstmaintainer@hotmail.com
-    - name: secondmaintainer app1
-      email: secondmaintainer@gmail.com
-  company: Random Inc.
-  website: https://website.com
-  source: https://github.com/random/repo
-  license: Apache-5.0
-  description: |-
-    ### Very Interesting Title
-    Some application content, and description
+resources:
+    - id: e2bdb456-704c-47e6-a0c7-934b26cd5ccf
+      title: Valid App 6
+      version: 0.0.1
+      maintainers:
+        - name: firstmaintainer app5
+          email: firstmaintainer@hotmail.com
+        - name: secondmaintainer app1
+          email: secondmaintainer@gmail.com
+      company: Random Inc.
+      website: https://website.com
+      source: https://github.com/random/repo
+      license: Apache-6.0
+      description: |-
+        ### Very Interesting Title
+        Some application content, and description
+nextLink: ""
 ```
 
 ### GET /metadata/{id}
@@ -211,23 +300,23 @@ Returns the matadata with the specified id.
 
 Sample request:
 ```
-GET localhost:8080/metadata/8cac3b1f-569f-4079-8612-cb74d6be7be0
+GET localhost:8080/metadata/e9861b9b-9155-4857-a9e9-c651ad7abba9
 ```
 Sample output:
 ```yaml
-- id: 8cac3b1f-569f-4079-8612-cb74d6be7be0
-  title: Valid App 3
-  version: 0.0.1
-  maintainers:
+id: e9861b9b-9155-4857-a9e9-c651ad7abba9
+title: Valid App 1
+version: 0.0.1
+maintainers:
     - name: firstmaintainer app5
       email: firstmaintainer@hotmail.com
     - name: secondmaintainer app1
       email: secondmaintainer@gmail.com
-  company: Random Inc.
-  website: https://website.com
-  source: https://github.com/random/repo
-  license: Apache-2.0
-  description: |-
+company: Random Inc.
+website: https://website.com
+source: https://github.com/random/repo
+license: Apache-5.0
+description: |-
     ### Interesting Title
     Some application content, and description
 ```
