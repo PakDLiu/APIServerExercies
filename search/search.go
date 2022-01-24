@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"reflect"
 	"strings"
+	"unicode"
 )
 
 //go:generate sh -c "test mocks/search/mock_search.go -nt $GOFILE && exit 0; mockgen -source=search.go -destination ../mock/search/mock_search.go"
@@ -71,18 +72,24 @@ func (s *Searcher) AddToIndex(data interface{}, id uuid.UUID, prefix string) {
 		if !s.DisableIndexWords {
 			// Check to see if value has multiple words
 			// If so, add each word to index as well
-			fieldValueParts := strings.Split(fieldValue, " ")
-			if len(fieldValueParts) > 1 {
-				for _, part := range fieldValueParts {
-					part := strings.TrimSpace(part)
-					if len(s.Index[fieldName][part]) == 0 {
-						s.Index[fieldName][part] = map[uuid.UUID]bool{}
-					}
-					s.Index[fieldName][part][id] = true
+			fieldValueParts := strings.Fields(fieldValue)
+			if len(fieldValueParts) <= 1 {
+				continue
+			}
+
+			for _, part := range fieldValueParts {
+				part, include := cleanWord(part)
+				if !include {
+					continue
 				}
+
+				// initialize map if needed
+				if len(s.Index[fieldName][part]) == 0 {
+					s.Index[fieldName][part] = map[uuid.UUID]bool{}
+				}
+				s.Index[fieldName][part][id] = true
 			}
 		}
-
 	}
 }
 
@@ -139,4 +146,14 @@ func (s *Searcher) FilterMetadata(query map[string][]string, database *core.Data
 	}
 
 	return values, nil
+}
+
+func cleanWord(s string) (string, bool) {
+	s = strings.TrimFunc(s, func(r rune) bool {
+		return !unicode.IsLetter(r) && !unicode.IsDigit(r)
+	})
+	if len(s) == 0 {
+		return "", false
+	}
+	return s, true
 }

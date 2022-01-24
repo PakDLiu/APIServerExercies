@@ -123,19 +123,23 @@ func TestSearcher_AddToIndex_WithoutDisableIndexWords(t *testing.T) {
 	data1 := struct {
 		Key string
 	}{
-		Key: "value1 value2 value3",
+		Key: "value1 value2\nvalue3\tvalue4\n   value5",
 	}
 	searcher.AddToIndex(&data1, id1, "")
 
-	assert.Len(t, searcher.Index["key"], 4)
-	assert.Len(t, searcher.Index["key"]["value1 value2 value3"], 1)
-	assert.True(t, searcher.Index["key"]["value1 value2 value3"][id1])
+	assert.Len(t, searcher.Index["key"], 6)
+	assert.Len(t, searcher.Index["key"]["value1 value2\nvalue3\tvalue4\n   value5"], 1)
+	assert.True(t, searcher.Index["key"]["value1 value2\nvalue3\tvalue4\n   value5"][id1])
 	assert.Len(t, searcher.Index["key"]["value1"], 1)
 	assert.True(t, searcher.Index["key"]["value1"][id1])
 	assert.Len(t, searcher.Index["key"]["value2"], 1)
 	assert.True(t, searcher.Index["key"]["value2"][id1])
 	assert.Len(t, searcher.Index["key"]["value3"], 1)
 	assert.True(t, searcher.Index["key"]["value3"][id1])
+	assert.Len(t, searcher.Index["key"]["value4"], 1)
+	assert.True(t, searcher.Index["key"]["value4"][id1])
+	assert.Len(t, searcher.Index["key"]["value5"], 1)
+	assert.True(t, searcher.Index["key"]["value5"][id1])
 }
 
 // endregion
@@ -261,6 +265,36 @@ func TestSearcher_FilterMetadata_WithInvalidKey(t *testing.T) {
 	assert.Nil(t, results)
 	assert.Error(t, err)
 	assert.Equal(t, "no such field name invalidkey", err.Error())
+}
+
+// endregion
+
+// region cleanWork
+
+func TestSearcher_CleanWord(t *testing.T) {
+	testString := "testString"
+	result, include := cleanWord(testString)
+	assert.True(t, include)
+	assert.Equal(t, testString, result)
+}
+
+func TestSearcher_CleanWord_EmptyString(t *testing.T) {
+	testString := ""
+	_, include := cleanWord(testString)
+	assert.False(t, include)
+}
+
+func TestSearcher_CleanWord_WithSpecialCharacters(t *testing.T) {
+	testString := "**testString**"
+	result, include := cleanWord(testString)
+	assert.True(t, include)
+	assert.Equal(t, "testString", result)
+}
+
+func TestSearcher_CleanWord_WithSpecialCharactersEmptyString(t *testing.T) {
+	testString := "###"
+	_, include := cleanWord(testString)
+	assert.False(t, include)
 }
 
 // endregion
