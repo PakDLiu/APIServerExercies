@@ -139,15 +139,12 @@ func (s *Searcher) FilterMetadata(query map[string][]string, database *core.Data
 		results = newResult
 	}
 
-	// Extract all metadatas from map to slice
-	values := make([]*core.Metadata, 0, len(results))
-	for _, value := range results {
-		values = append(values, value)
-	}
-
-	return values, nil
+	return results, nil
 }
 
+// Trims the string
+// Will removing characters from the beginning and the end of the string if it is not a letter or a number
+// Returns the cleaned string and boolean whether to be indexed.
 func cleanWord(s string) (string, bool) {
 	s = strings.TrimFunc(s, func(r rune) bool {
 		return !unicode.IsLetter(r) && !unicode.IsDigit(r)

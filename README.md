@@ -267,7 +267,9 @@ resources:
 nextLink: ""
 ```
 
-Each value's word are index and searchable by default. Can disable this feature with `-disableIndexWords` during startup.
+Since the description field is a multiline field, searching the description field by entering the entire description is
+not very user friendly. The indexing logic will also index each word in the value in addition to the entire value and
+will be searchable by default. Can disable this feature with `-disableIndexWords` during startup.
 
 Sample request:
 ```
@@ -323,9 +325,9 @@ description: |-
 
 ### PUT /metadata
 
-**NOTE:** This endpoint doesn't really follow the REST guidelines; it is here just for convenience.
-
 Creates a metadata entry. If `id` is not provided in the payload, a random one will be generated.
+
+**NOTE:** This endpoint doesn't really follow the REST guidelines. It is here just for convenience.
 
 Sample request:
 ```

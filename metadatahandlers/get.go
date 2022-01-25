@@ -59,7 +59,7 @@ func (m *MetadataHandlerManager) HandleMetadataGet(
 		return
 	}
 
-	// Need to remove the paging parameters as they are not going to be in the index
+	// Remove the paging parameters as they are not going to be in the index
 	delete(query, offsetParameter)
 	delete(query, pageSizeParameter)
 
@@ -83,6 +83,7 @@ func (m *MetadataHandlerManager) HandleMetadataGet(
 	w.Write(p)
 }
 
+// Returns the page based on paging parameters
 func pageResults(
 	results []*core.Metadata,
 	offset int,
@@ -102,6 +103,7 @@ func pageResults(
 
 	var nextLink string
 
+	// Add NextLink only if there is going to be a next page
 	if addNextLink {
 		originalUrl := req.URL
 		query := originalUrl.Query()
@@ -117,6 +119,7 @@ func pageResults(
 	}
 }
 
+// Extract and validate offset and pageSize from the query parameters and return
 func parsePagingParameters(query map[string][]string) (int, int, error) {
 	var err error
 	offset := defaultOffset
