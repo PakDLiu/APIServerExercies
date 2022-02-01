@@ -2,6 +2,9 @@ package util
 
 import "net/url"
 
+// url.URL does not adhear to the yaml.Unmarshaler interface
+// Need to write a wrapper to url.URL and impliment UnmarshalYAML and MarshalYAML
+// https://povilasv.me/yaml-url-parsing/
 type Yamlurl struct {
 	*url.URL
 }

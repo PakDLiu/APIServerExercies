@@ -93,6 +93,7 @@ func (s *Searcher) AddToIndex(data interface{}, id uuid.UUID, prefix string) {
 	}
 }
 
+// Remove metadata with id from the index
 func (s *Searcher) RemoveFromIndex(id uuid.UUID) {
 	for _, fieldValue := range s.Index {
 		for key, uuids := range fieldValue {
@@ -106,10 +107,12 @@ func (s *Searcher) RemoveFromIndex(id uuid.UUID) {
 	}
 }
 
+// Filters stored metadata from database based on query
+// Returns a list of filtered metadata
 func (s *Searcher) FilterMetadata(query map[string][]string, database *core.Database) ([]*core.Metadata, error) {
 	// Copy all metadatas
 	results := make([]*core.Metadata, 0, len(database.Metadatas))
-	for _, id := range database.Ordering {
+	for _, id := range database.Ordering { // keeping the default ordering
 		results = append(results, database.Metadatas[id])
 	}
 
@@ -131,6 +134,7 @@ func (s *Searcher) FilterMetadata(query map[string][]string, database *core.Data
 		newResult := make([]*core.Metadata, 0, len(matchedIds))
 
 		// Craft new result list based on matching ids from index
+		// Gets intersect of results and matchedIds
 		for index, metadata := range results {
 			if _, ok := matchedIds[metadata.Id]; ok {
 				newResult = append(newResult, results[index])
